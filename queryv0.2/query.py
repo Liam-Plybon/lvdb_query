@@ -43,6 +43,7 @@ kine_id_select=[]
 
 if error == 1:#this is my lazy implementation-- try: https://docs.python.org/3.4/tutorial/errors.html
     print("ERROR: A table you requested does not exist")
+    quit()
 
 if dist == 1:
     for key in in_keys:
@@ -72,7 +73,24 @@ for x in stru_id_select:
     
 for x in kine_id_select:
     kine_id.extend(db.select(x))
-    
-print(dist_id)
-print(stru_id)
-print(kine_id)
+
+####search query
+#create query to retrive results-- currently recieves all entries from each requested table. Looking into adding capability to pick and choose which parameters. 
+
+dist_search=[]
+stru_search=[]
+kine_search=[]
+
+if dist == 1:
+    for id in dist_id:
+        dist_search.extend([add('SELECT * FROM distance WHERE id=\'' + id , '\';')]
+        
+if stru == 1:
+    for id in stru_id:
+        stru_search.extend([add('SELECT * FROM structure WHERE id=\'' + id , '\';')]
+        
+if kine == 1:
+    for id in kine_id:
+        kine_search.extend([add('SELECT * FROM kinematics WHERE id=\'' + id , '\';')]
+
+print(dist_search)
