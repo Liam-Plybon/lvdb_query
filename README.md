@@ -6,10 +6,10 @@ This is a program being developed to complete psql queries for the local volume 
 
 
 
-## Development updates: ##
+### Development updates: ###
 
 
-### v0.2 ###
+#### v0.2 ####
 
 We are now migrating to a new input structure consisting of a individual .csv for the keys and the required tables. Please see the v0.2 folder for more details. 
 
@@ -23,7 +23,7 @@ We will also be using a slightly different tag table structure in the format:
 
 in which each integer is the id of the most desirable entry in the distance, kinematics, and structure tables. 
 
-### v0.1 ### 
+#### v0.1 ####
 
 This is our initial proof of concept for a simple tag table stucture in the format: 
 
