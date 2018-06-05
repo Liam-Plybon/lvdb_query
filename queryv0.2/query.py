@@ -5,6 +5,7 @@ import numpy as np
 from operator import add
 import lvdb.database #leave commented out while testing offline
 import psycopg2 as psy #leave commented out while testing offline
+import csv
 
 ####inputs
 in_keys=np.genfromtxt('in_keys.csv', dtype=str, delimiter=',')#keys input
@@ -80,6 +81,7 @@ for x in kine_id_select:
 
 ####search query
 #create query to retrive results-- currently recieves all entries from each requested table. Looking into adding capability to pick and choose which parameters. 
+#Could probably implement using the headers and input the headers in place of * in the query below. if someone select all
 
 dist_search=[]
 stru_search=[]
@@ -112,3 +114,12 @@ for x in stru_search:
 for x in kine_search:
     kine_out.extend(db.select(x))
     
+####write .csv output
+#verify whether csv needs to be written by checking if user requested
+if dist == 1:
+	dist_csv = 'distance.csv'
+	with open(dist_csv,'wb') as out:
+        	csv_out=csv.writer(out)
+    		csv_out.writerow(dist_header)
+    		for row in dist_out:
+        		csv_out.writerow(row)
