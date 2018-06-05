@@ -1,37 +1,40 @@
-#Author: John Maner
-#Contact: jmaner33@tamu.edu 
+#Authors: John Maner, Liam Plybon
+#Contact: jmaner33@tamu.edu, katana@tamu.edu
 
 import numpy as np
 from operator import add
-import lvdb.database
-import psycopg2 as psy 
+#import lvdb.database #leave commented out while testing offline
+#import psycopg2 as psy #leave commented out while testing offline
 
-input=np.genfromtxt('input.csv', dtype=str, delimiter=',')
 
-#search for glossary table based on input table request
-#This is easily expandable!  
-tables=np.array(['distance_glossary_test','ERROR'])
+in_keys=np.genfromtxt('in_keys.csv', dtype=str, delimiter=',')#keys input
+in_tabl=np.genfromtxt('in_tabl.csv', dtype=str, delimiter=',')#desired tables to be searched
 
-if input[1] == 'distance': 
-    table=tables[0]
-    
-elif input[1] != 'distance': 
-    print('ERROR: The table',input[1],'you requested does not exist.')
 
-#connect to database 
-db= lvdb.database.Database()
-db.connect()
+#input interpreter
+#search for requested tables 
 
-#constructs the id query as a string
-idquery=reduce(add, ('SELECT id FROM ' , table , ' WHERE key=\'' , input[0] ,'\';'))
+tables=np.array([str('distance'), str('structure'), str('kinematics')])
 
-#generate array of desired id's 
-q_id =np.array(db.select(idquery))
+#define dummy variables-- when these becomes "active", i.e =1, the corresponding table will be searched. 
+dist=0
+stru=0
+kine=0
+error=0
 
-id= str(q_id[0]).replace('[','').replace(']','')
+for x in in_tabl:
+    if x == 'distance':
+        dist=1
+    elif x == 'structure':
+        stru=1
+    elif x == 'kinematics':
+        kine=1
+    elif x != 'distance' or 'structure' or 'kinematics':
+        error=1
+        
+#construct id search query
+distid=[]
 
-q_out=reduce(add, ('SELECT * FROM ', input[1] , ' WHERE id=\'' , id , '\';'))
-
-out=db.select(q_out)
-
-print(out)
+if dist == 1:
+    for key in in_keys:
+        dist_id_select=distid.extend([add('SELECT dist_id FROM mast_gloss_test WHERE key=\'' + key , '\';')])
