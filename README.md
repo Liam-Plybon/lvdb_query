@@ -1,6 +1,6 @@
 # lvdb_query
 
-This is a program being developed to complete psql queries for the local volume database project currently in development. 
+This is a program currently in development to complete psql queries for the local volume database project.  
 
 ### Installation ###
 Clone this repo with: 
