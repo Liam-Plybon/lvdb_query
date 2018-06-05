@@ -17,7 +17,7 @@ Create a file called setup.sh with the lines:
 export PYTHONPATH=~/your_directory/local-volume-db:$PYTHONPATH
 </pre>
 
-Initialize this file with <pre> source setup.sh </pre> before starting ipython. 
+Initialize this file before starting ipython with: <pre> source setup.sh </pre> 
 
 ### Development updates ###
 
