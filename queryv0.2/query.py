@@ -83,14 +83,14 @@ kine_search=[]
 
 if dist == 1:
     for id in dist_id:
-        dist_search.extend([add('SELECT * FROM distance WHERE id=\'' + id , '\';')]
+        dist_search.extend([add('SELECT * FROM distance WHERE id=\'' + str(id).replace('(','').replace(',)','') , '\';')])
         
 if stru == 1:
     for id in stru_id:
-        stru_search.extend([add('SELECT * FROM structure WHERE id=\'' + id , '\';')]
+        stru_search.extend([add('SELECT * FROM structure WHERE id=\'' + str(id).replace('(','').replace(',)','') , '\';')])
         
 if kine == 1:
     for id in kine_id:
-        kine_search.extend([add('SELECT * FROM kinematics WHERE id=\'' + id , '\';')]
+        kine_search.extend([add('SELECT * FROM kinematics WHERE id=\'' + str(id).replace('(','').replace(',)','') , '\';')])
 
 print(dist_search)
