@@ -11,6 +11,13 @@ git clone https://github.com/jmaner/lvdb_query.git
 
 This program requires the local-volume-db python package. Please see: https://github.com/kadrlica/local-volume-db.
 
+Create a file called setup.sh with the lines: 
+
+<pre>
+export PYTHONPATH=~/your_directory/local-volume-db:$PYTHONPATH
+</pre>
+
+Initialize this file with <pre> source setup.sh </pre> before starting ipython. 
 
 ### Development updates ###
 
