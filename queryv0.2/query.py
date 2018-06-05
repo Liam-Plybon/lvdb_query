@@ -17,6 +17,10 @@ in_tabl=np.genfromtxt('in_tabl.csv', dtype=str, delimiter=',')#desired tables to
 
 tables=['distance', 'structure', 'kinematics']
 
+dist_header=['id','key','dist_mod','dist_mod_em','dist_mod_ep','method','ref','comments']
+stru_header=['id','key','ra','ra_em','dec','dec_em','dec_ep','ellipticity','ellipticity_em','ellipticity_ep','position_angle','position_angle_em','position_angle_ep','rscale','rscale_em','rscale_ep','rparam_2','rparam_2_em','rparam_2_ep','rhalf','rhalf_em','rhalf_ep','m_v','m_v_em','m_v_ep','apparent_magnitude','apparent_magnitude_em','apparent_magnitude_ep','ref','comments','model']
+kine_header=['id','key','helio_velocity','helio_velocity_em','helio_velocity_ep','ref','comments','n']
+
 #define dummy variables-- when these becomes "active", i.e =1, the corresponding table will be searched. 
 dist=0
 stru=0
@@ -93,4 +97,18 @@ if kine == 1:
     for id in kine_id:
         kine_search.extend([add('SELECT * FROM kinematics WHERE id=\'' + str(id).replace('(','').replace(',)','') , '\';')])
 
-print(dist_search)
+
+#search for final results
+dist_out=[]
+stru_out=[]
+kine_out=[]
+
+for x in dist_search:
+    dist_out.extend(db.select(x))
+    
+for x in stru_search:
+    stru_out.extend(db.select(x))
+    
+for x in kine_search:
+    kine_out.extend(db.select(x))
+    
