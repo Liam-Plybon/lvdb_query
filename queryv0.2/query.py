@@ -117,9 +117,27 @@ for x in kine_search:
 ####write .csv output
 #verify whether csv needs to be written by checking if user requested
 if dist == 1:
-	dist_csv = 'distance.csv'
-	with open(dist_csv,'wb') as out:
-        	csv_out=csv.writer(out)
-    		csv_out.writerow(dist_header)
-    		for row in dist_out:
-        		csv_out.writerow(row)
+    dist_csv = 'distance.csv'
+    with open(dist_csv,'wb') as out:
+        csv_out=csv.writer(out)
+        csv_out.writerow(dist_header)
+        for row in dist_out:
+            csv_out.writerow(row)
+
+if stru == 1:
+    stru_csv = 'structure.csv'
+    with open(stru_csv,'wb') as out:
+        csv_out=csv.writer(out)
+        csv_out.writerow(stru_header)
+        for row in stru_out:
+            csv_out.writerow(row)
+
+if kine == 1:
+    kine_csv = 'kinematics.csv'
+    with open(kine_csv,'wb') as out:
+        csv_out=csv.writer(out)
+        csv_out.writerow(kine_header)
+        for row in kine_out:
+            csv_out.writerow(row)
+
+quit()
