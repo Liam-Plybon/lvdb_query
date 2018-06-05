@@ -34,7 +34,7 @@ We will also be using a slightly different tag table structure in the format:
  and_1    |      12 |     355 |     413
 </pre>
 
-in which each integer is the id of the most desirable entry in the distance, kinematics, and structure tables. 
+in which each integer is the id of the most desirable entry in the distance, kinematics, and structure tables. This is designed to be easily expanded for other tables, i.e chemistry, j-factor, etc. 
 
 #### v0.1 ####
 
