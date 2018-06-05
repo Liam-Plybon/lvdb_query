@@ -3,10 +3,16 @@
 This is a program being developed to complete psql queries for the local volume database project currently in development. 
 
 ### Installation ###
+Clone this repo with: 
+
+<pre>
+git clone https://github.com/jmaner/lvdb_query.git
+</pre>
+
+This program requires the local-volume-db python package. Please see: https://github.com/kadrlica/local-volume-db.
 
 
-
-### Development updates: ###
+### Development updates ###
 
 
 #### v0.2 ####
