@@ -20,6 +20,7 @@ in_tabl=np.genfromtxt('in_tabl.csv', dtype=str, delimiter=',')#desired tables to
 
 tables=['distance', 'structure', 'kinematics']
 
+#these headers are used for the final output csv, and will also be used to allow users to query individual parameters. 
 dist_header=['id','key','dist_mod','dist_mod_em','dist_mod_ep','method','ref','comments']
 stru_header=['id','key','ra','ra_em','dec','dec_em','dec_ep','ellipticity','ellipticity_em','ellipticity_ep','position_angle','position_angle_em','position_angle_ep','rscale','rscale_em','rscale_ep','rparam_2','rparam_2_em','rparam_2_ep','rhalf','rhalf_em','rhalf_ep','m_v','m_v_em','m_v_ep','apparent_magnitude','apparent_magnitude_em','apparent_magnitude_ep','ref','comments','model']
 kine_header=['id','key','helio_velocity','helio_velocity_em','helio_velocity_ep','ref','comments','n']
@@ -37,8 +38,12 @@ for x in in_tabl:
         stru=1
     elif x == 'kinematics':
         kine=1
-    elif x != 'distance' or 'structure' or 'kinematics':
+    elif x != 'distance' or 'structure' or 'kinematics':#list all table names here. This will be cleaned up with a proper try except statement at some point. 
         error=1
+               
+if error == 1:#this is my lazy implementation-- try: https://docs.python.org/3.4/tutorial/errors.html
+    print("ERROR: A table you requested does not exist")
+    quit()
         
 ####id fetcher
 #constructs a lists of queries with the appropriate keys for each requested table
@@ -48,13 +53,9 @@ dist_id_select=[]
 stru_id_select=[]
 kine_id_select=[]
 
-if error == 1:#this is my lazy implementation-- try: https://docs.python.org/3.4/tutorial/errors.html
-    print("ERROR: A table you requested does not exist")
-    quit()
-
 if dist == 1:
     for key in in_keys:
-        dist_id_select.extend([add('SELECT dist_id FROM mast_gloss_test WHERE key=\'' + key , '\';')])
+        dist_id_select.extend([add('SELECT dist_id FROM mast_gloss_test WHERE key=\'' + key , '\';')])#replace mast_gloss_test with final glossary table
         
 if stru == 1:
     for key in in_keys:
@@ -68,6 +69,7 @@ if kine == 1:
 db=lvdb.database.Database() 
 db.connect()
 
+#blank lists to be populated with desired id's from mast_gloss_test
 dist_id=[]
 stru_id=[]
 kine_id=[]
@@ -85,6 +87,7 @@ for x in kine_id_select:
 #create query to retrive results-- currently recieves all entries from each requested table. Looking into adding capability to pick and choose which parameters. 
 #Could probably implement using the headers and input the headers in place of * in the query below. if someone select all
 
+#blank lists to be populated with search queries
 dist_search=[]
 stru_search=[]
 kine_search=[]
@@ -118,6 +121,7 @@ for x in kine_search:
     
 ####write .csv output
 #verify whether csv needs to be written by checking if user requested
+
 #I added a random generator to the end of each file name to avoid files being overwritten. 
 if dist == 1:
     dist_csv = 'distance_out' + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5)) + '.csv'
