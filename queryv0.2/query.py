@@ -2,7 +2,6 @@
 #Contact: jmaner33@tamu.edu, katana@tamu.edu
 
 import numpy as np
-from operator import add
 import lvdb.database #leave commented out while testing offline
 import psycopg2 as psy #leave commented out while testing offline
 import csv
@@ -70,15 +69,15 @@ kine_id_select=[]
 
 if dist == 1:
     for key in in_keys:
-        dist_id_select.extend([add('SELECT dist_id FROM mast_gloss_test WHERE key=\'' + key , '\';')])#replace mast_gloss_test with final glossary table
+        dist_id_select.extend([str('SELECT dist_id FROM mast_gloss_test WHERE key=\'' + key + '\';')])#replace mast_gloss_test with final glossary table
         
 if stru == 1:
     for key in in_keys:
-        stru_id_select.extend([add('SELECT stru_id FROM mast_gloss_test WHERE key=\'' + key , '\';')])
+        stru_id_select.extend([str('SELECT stru_id FROM mast_gloss_test WHERE key=\'' + key + '\';')])
         
 if kine == 1:
     for key in in_keys:
-        kine_id_select.extend([add('SELECT kine_id FROM mast_gloss_test WHERE key=\'' + key , '\';')])
+        kine_id_select.extend([str('SELECT kine_id FROM mast_gloss_test WHERE key=\'' + key + '\';')])
         
 #connect to local-volume
 db=lvdb.database.Database() 
@@ -109,15 +108,15 @@ kine_search=[]
 
 if dist == 1:
     for id in dist_id:
-        dist_search.extend([add('SELECT * FROM distance WHERE id=\'' + str(id).replace('(','').replace(',)','') , '\';')])
+        dist_search.extend([str('SELECT * FROM distance WHERE id=\'' + str(id).replace('(','').replace(',)','') + '\';')])
         
 if stru == 1:
     for id in stru_id:
-        stru_search.extend([add('SELECT * FROM structure WHERE id=\'' + str(id).replace('(','').replace(',)','') , '\';')])
+        stru_search.extend([str('SELECT * FROM structure WHERE id=\'' + str(id).replace('(','').replace(',)','') + '\';')])
         
 if kine == 1:
     for id in kine_id:
-        kine_search.extend([add('SELECT * FROM kinematics WHERE id=\'' + str(id).replace('(','').replace(',)','') , '\';')])
+        kine_search.extend([str('SELECT * FROM kinematics WHERE id=\'' + str(id).replace('(','').replace(',)','') + '\';')])
 
 
 #search for final results
