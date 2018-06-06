@@ -121,7 +121,7 @@ for x in kine_search:
 #I added a random generator to the end of each file name to avoid files being overwritten. 
 if dist == 1:
     dist_csv = 'distance_out' + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5)) + '.csv'
-    print('FILE' + dist_csv + 'WAS SAVED')
+    print('FILE ' + dist_csv + ' WAS SAVED')
     with open(dist_csv,'wb') as out:
         csv_out=csv.writer(out)
         csv_out.writerow(dist_header)
@@ -130,6 +130,7 @@ if dist == 1:
 
 if stru == 1:
     stru_csv = 'structure_out' + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5)) + '.csv'
+    print('FILE ' + stru_csv + ' WAS SAVED')
     with open(stru_csv,'wb') as out:
         csv_out=csv.writer(out)
         csv_out.writerow(stru_header)
@@ -138,6 +139,7 @@ if stru == 1:
 
 if kine == 1:
     kine_csv = 'kinematics_out' + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5)) + '.csv'
+    print('FILE ' + kine_csv + ' WAS SAVED')
     with open(kine_csv,'wb') as out:
         csv_out=csv.writer(out)
         csv_out.writerow(kine_header)
