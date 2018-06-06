@@ -6,6 +6,8 @@ from operator import add
 import lvdb.database #leave commented out while testing offline
 import psycopg2 as psy #leave commented out while testing offline
 import csv
+import random
+import string
 
 ####inputs
 in_keys=np.genfromtxt('in_keys.csv', dtype=str, delimiter=',')#keys input
@@ -116,8 +118,10 @@ for x in kine_search:
     
 ####write .csv output
 #verify whether csv needs to be written by checking if user requested
+#I added a random generator to the end of each file name to avoid files being overwritten. 
 if dist == 1:
-    dist_csv = 'distance.csv'
+    dist_csv = 'distance_out' + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5)) + '.csv'
+    print('FILE' + dist_csv + 'WAS SAVED')
     with open(dist_csv,'wb') as out:
         csv_out=csv.writer(out)
         csv_out.writerow(dist_header)
@@ -125,7 +129,7 @@ if dist == 1:
             csv_out.writerow(row)
 
 if stru == 1:
-    stru_csv = 'structure.csv'
+    stru_csv = 'structure_out' + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5)) + '.csv'
     with open(stru_csv,'wb') as out:
         csv_out=csv.writer(out)
         csv_out.writerow(stru_header)
@@ -133,7 +137,7 @@ if stru == 1:
             csv_out.writerow(row)
 
 if kine == 1:
-    kine_csv = 'kinematics.csv'
+    kine_csv = 'kinematics_out' + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5)) + '.csv'
     with open(kine_csv,'wb') as out:
         csv_out=csv.writer(out)
         csv_out.writerow(kine_header)
