@@ -53,7 +53,7 @@ try:
     if error == 1:
         raise TableError(x)
 except TableError as e:
-    print('ERROR: At least one table requested does not have entries in master glossary table. No data will be returned for this table. ')
+    print('ERROR: At least one table requested does not have entries in master glossary table. No data will be returned for this table.')
 
 
 ####id fetcher
@@ -133,7 +133,8 @@ for x in kine_search:
 ####write .csv output
 #verify whether csv needs to be written by checking if user requested
 
-#I added a random character generator to the end of each file name to avoid files being overwritten. These will start to pile up in testing--create a script on your personal account. 
+#I added a random character generator to the end of each file name to avoid files being overwritten. These will start to pile up in testing
+#you may want to add a file on your personal machine that removes these files that begin with distance_out, structure_out, etc in the lvdb_query/query_v0.2 directory
 if dist == 1:
     dist_csv = 'distance_out' + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5)) + '.csv'
     print('FILE ' + dist_csv + ' WAS SAVED')
@@ -165,4 +166,5 @@ if dist or stru or kine == 1:
     print("FILE(S) SAVED TO:" + os.getcwd())
 
 print('Elapsed time: ' + str(time.time()-t) + 's.')
+
 quit()
