@@ -24,19 +24,16 @@ source PYTHONPATH=~/your_directory/local-volume-db:$PYTHONPATH
 
 We are now migrating to a new input structure consisting of a individual .csv for the keys and the required tables. Please see the v0.2 folder for more details. 
 
-We will also be using a slightly different tag table structure in the 
+We use an expanded version of the initial tag table structure that may be seen in the LVDB_Notes wiki page on redmine. 
 
-in which each integer is the id of the most desirable entry in the distance, kinematics, and structure tables. This is designed to be easily expanded for other tables, i.e chemistry, j-factor, etc. 
+This version is fully functional and returns a .csv with appropriately formatted headers. 
+
+Features in progress: select individual parameters. 
 
 #### v0.1 ####
 
-This is our initial proof of concept for a simple tag table stucture in the format: 
+This is our initial proof of concept for a simple tag table stucture. 
 
-<pre>
-   key   |    id 
----------+----------
-bootes_1 |    145   
-and_1    |     12   
-</pre>
+Details on the structure of the tag table may be seen in the LVDB_Notes wiki page on redmine. 
 
 Program outputs data from database as a tuple in the terminal. This clearly isn't very useful, however, it is functional. 
