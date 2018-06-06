@@ -11,13 +11,11 @@ git clone https://github.com/jmaner/lvdb_query.git
 
 This program depends on the <a href="https://github.com/kadrlica/local-volume-db">local-volume db python package</a> written by <a href="https://github.com/kadrlica/">Alex Drlica-Wagner</a>.
 
-Add these lines to your @.bashrc@ file, and activate before starting ipython with @source .bashrc@. 
+You must then add the appropriate lines to your @.bashrc@ file in the format:
 
 <pre>
-export PYTHONPATH=~kadrlica/software/local-volume-db:$PYTHONPATH
+source PYTHONPATH=~/your_directory/local-volume-db:$PYTHONPATH
 </pre>
-
-
 
 ### Development updates ###
 
