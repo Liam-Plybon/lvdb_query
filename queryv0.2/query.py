@@ -2,30 +2,30 @@
 #Contact: jmaner33@tamu.edu, katana@tamu.edu
 
 import numpy as np
-import lvdb.database #leave commented out while testing offline
-import psycopg2 as psy #leave commented out while testing offline
+import lvdb.database 
+import psycopg2 as psy 
 import csv
 import random
 import string
 import os
 
 ####inputs
-in_keys=np.genfromtxt('in_keys.csv', dtype=str, delimiter=',')#keys input
-in_tabl=np.genfromtxt('in_tabl.csv', dtype=str, delimiter=',')#desired tables to be searched
+in_keys=np.genfromtxt('in_keys.csv', dtype=str, delimiter=',')#keys to search
+in_tabl=np.genfromtxt('in_tabl.csv', dtype=str, delimiter=',')#tables to be searched
 
 
 ####input interpreter
 
 #search for requested tables 
 
-tables=['distance', 'structure', 'kinematics']
+tables=['distance', 'structure', 'kinematics']#update when a table is added to mast_gloss_test
 
 #these headers are used for the final output csv, and will also be used to allow users to query individual parameters. 
 dist_header=['id','key','dist_mod','dist_mod_em','dist_mod_ep','method','ref','comments']
 stru_header=['id','key','ra','ra_em','dec','dec_em','dec_ep','ellipticity','ellipticity_em','ellipticity_ep','position_angle','position_angle_em','position_angle_ep','rscale','rscale_em','rscale_ep','rparam_2','rparam_2_em','rparam_2_ep','rhalf','rhalf_em','rhalf_ep','m_v','m_v_em','m_v_ep','apparent_magnitude','apparent_magnitude_em','apparent_magnitude_ep','ref','comments','model']
 kine_header=['id','key','helio_velocity','helio_velocity_em','helio_velocity_ep','ref','comments','n']
 
-#define dummy variables-- when these becomes "active", i.e =1, the corresponding table will be searched. 
+#define dummy variables-- when these becomes "active", i.e = 1, the corresponding table will be searched. 
 dist=0
 stru=0
 kine=0
@@ -41,10 +41,10 @@ for x in in_tabl:
     elif x != 'distance' or 'structure' or 'kinematics':#list all table names here. This will be cleaned up with a proper try except statement at some point. 
         error=1
              
-#defining error for 
+#defining error for the case in which a table the user requested is not in mast_gloss_test. 
 class TableError(Exception):
     def __init__(self, value):
-        self.value  = tables
+        self.value  = tables#tables list from above. 
 
 try:
     for x in in_tabl:
@@ -53,11 +53,6 @@ try:
 except TableError as e:
     print('ERROR: At least one table requested does not have entries in master glossary table. No data will be returned for this table. ')
 
-#this was my or
-#if error == 1: #this is my lazy implementation-- try: https://docs.python.org/3.4/tutorial/errors.html
-#    print("ERROR: A table you requested does not exist")
-#    quit()
-        
 
 ####id fetcher
 #constructs a lists of queries with the appropriate keys for each requested table
@@ -136,7 +131,7 @@ for x in kine_search:
 ####write .csv output
 #verify whether csv needs to be written by checking if user requested
 
-#I added a random generator to the end of each file name to avoid files being overwritten. 
+#I added a random character generator to the end of each file name to avoid files being overwritten. These will start to pile up in testing--create a script on your personal account. 
 if dist == 1:
     dist_csv = 'distance_out' + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5)) + '.csv'
     print('FILE ' + dist_csv + ' WAS SAVED')
