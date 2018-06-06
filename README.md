@@ -1,6 +1,6 @@
 # lvdb_query
 
-This is a program currently in development to complete psql queries for the local volume database project.  
+This is a program in development to support the retrieval of data from the local volume database project. At this time, the program is only function on the computer in which the local volume database is located. 
 
 ### Installation ###
 Clone this repo with: 
@@ -9,15 +9,15 @@ Clone this repo with:
 git clone https://github.com/jmaner/lvdb_query.git
 </pre>
 
-This program requires the local-volume-db python package. Please see: https://github.com/kadrlica/local-volume-db.
+This program depends on the <a href="https://github.com/kadrlica/local-volume-db">local-volume db python package</a> written by <a href="https://github.com/kadrlica/">Alex Drlica-Wagner</a>.
 
-Create a file called setup.sh with the lines: 
+Add these lines to your @.bashrc@ file, and activate before starting ipython with @source .bashrc@. 
 
 <pre>
-export PYTHONPATH=~/your_directory/local-volume-db:$PYTHONPATH
+export PYTHONPATH=~kadrlica/software/local-volume-db:$PYTHONPATH
 </pre>
 
-Initialize this file before starting ipython with: <pre> source setup.sh </pre> 
+
 
 ### Development updates ###
 
@@ -26,13 +26,7 @@ Initialize this file before starting ipython with: <pre> source setup.sh </pre>
 
 We are now migrating to a new input structure consisting of a individual .csv for the keys and the required tables. Please see the v0.2 folder for more details. 
 
-We will also be using a slightly different tag table structure in the format: 
-<pre>
-   key    | dist_id | kine_id | stru_id 
-----------+---------+---------+---------
- bootes_1 |     145 |     266 |     617
- and_1    |      12 |     355 |     413
-</pre>
+We will also be using a slightly different tag table structure in the 
 
 in which each integer is the id of the most desirable entry in the distance, kinematics, and structure tables. This is designed to be easily expanded for other tables, i.e chemistry, j-factor, etc. 
 
