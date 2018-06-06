@@ -1,6 +1,8 @@
 #Authors: John Maner, Liam Plybon
 #Contact: jmaner33@tamu.edu, katana@tamu.edu
 
+import time
+t = time.time()
 import numpy as np
 import lvdb.database 
 import psycopg2 as psy 
@@ -8,6 +10,7 @@ import csv
 import random
 import string
 import os
+
 
 ####inputs
 in_keys=np.genfromtxt('in_keys.csv', dtype=str, delimiter=',')#keys to search
@@ -47,9 +50,8 @@ class TableError(Exception):
         self.value  = tables#tables list from above. 
 
 try:
-    for x in in_tabl:
-        if x != tables:
-            raise TableError(x)
+    if error == 1:
+        raise TableError(x)
 except TableError as e:
     print('ERROR: At least one table requested does not have entries in master glossary table. No data will be returned for this table. ')
 
@@ -162,4 +164,5 @@ if kine == 1:
 if dist or stru or kine == 1:
     print("FILE(S) SAVED TO:" + os.getcwd())
 
+print('Elapsed time: ' + str(time.time()-t) + 's.')
 quit()
