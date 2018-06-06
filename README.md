@@ -9,9 +9,9 @@ Clone this repo with:
 git clone https://github.com/jmaner/lvdb_query.git
 </pre>
 
-This program depends on the <a href="https://github.com/kadrlica/local-volume-db">local-volume db python package</a> written by <a href="https://github.com/kadrlica/">Alex Drlica-Wagner</a>.
+This program depends on the <a href="https://github.com/kadrlica/local-volume-db">local-volume db </a> python package written by <a href="https://github.com/kadrlica/">Alex Drlica-Wagner</a>.
 
-You must then add the appropriate lines to your @.bashrc@ file in the format:
+You must then add the line to your <pre>.bashrc</pre> in the format:
 
 <pre>
 source PYTHONPATH=~/your_directory/local-volume-db:$PYTHONPATH
@@ -19,6 +19,15 @@ source PYTHONPATH=~/your_directory/local-volume-db:$PYTHONPATH
 
 ### Development updates ###
 
+<b>Features in progress/planned: </b>
+
+<ul>
+<li>Detect duplicate tables/keys in input</li>
+  
+<li>Allow users to select individual parameters</li>
+
+<li>output key,table,reference,notes to a single separate file called ref? </li>
+</ul>
 
 #### v0.2 ####
 
@@ -28,7 +37,6 @@ We use an expanded version of the initial tag table structure that may be seen i
 
 This version is fully functional and returns a .csv with appropriately formatted headers. 
 
-Features in progress: select individual parameters. 
 
 #### v0.1 ####
 
