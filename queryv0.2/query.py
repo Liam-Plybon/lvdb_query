@@ -8,6 +8,7 @@ import psycopg2 as psy #leave commented out while testing offline
 import csv
 import random
 import string
+import os
 
 ####inputs
 in_keys=np.genfromtxt('in_keys.csv', dtype=str, delimiter=',')#keys input
@@ -40,11 +41,25 @@ for x in in_tabl:
         kine=1
     elif x != 'distance' or 'structure' or 'kinematics':#list all table names here. This will be cleaned up with a proper try except statement at some point. 
         error=1
-               
-if error == 1:#this is my lazy implementation-- try: https://docs.python.org/3.4/tutorial/errors.html
-    print("ERROR: A table you requested does not exist")
-    quit()
+             
+#defining error for 
+class TableError(Exception):
+    def __init__(self, value):
+        self.value  = tables
+
+try:
+    for x in in_tabl:
+        if x != tables:
+            raise TableError(x)
+except TableError as e:
+    print('ERROR: At least one table requested does not have entries in master glossary table. No data will be returned for this table. ')
+
+#this was my or
+#if error == 1: #this is my lazy implementation-- try: https://docs.python.org/3.4/tutorial/errors.html
+#    print("ERROR: A table you requested does not exist")
+#    quit()
         
+
 ####id fetcher
 #constructs a lists of queries with the appropriate keys for each requested table
 
@@ -149,5 +164,8 @@ if kine == 1:
         csv_out.writerow(kine_header)
         for row in kine_out:
             csv_out.writerow(row)
+            
+if dist or stru or kine == 1:
+    print("FILE(S) SAVED TO:" + os.getcwd())
 
 quit()
