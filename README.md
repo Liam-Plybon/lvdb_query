@@ -22,7 +22,7 @@ source PYTHONPATH=~/your_installation_directory/local-volume-db:$PYTHONPATH
 <b>Features in progress/planned: </b>
 
 <ul>
-<li>Detect duplicate tables/keys in input</li>
+<li>Detect duplicate keys in input</li>
   
 <li>Allow users to select individual parameters</li>
 
