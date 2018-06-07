@@ -14,7 +14,7 @@ This program depends on the <a href="https://github.com/kadrlica/local-volume-db
 You must then add the line to your <pre>.bashrc</pre> in the format:
 
 <pre>
-source PYTHONPATH=~/your_directory/local-volume-db:$PYTHONPATH
+source PYTHONPATH=~/your_installation_directory/local-volume-db:$PYTHONPATH
 </pre>
 
 ### Development updates ###
