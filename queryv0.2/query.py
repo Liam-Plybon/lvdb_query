@@ -4,35 +4,49 @@
 ###############################################################################
 
 import time
-import lvdb.database 
 import csv
 import random
 import string
 import os
 import numpy as np
+#import lvdb.database #uncomment to import without try except statement below
 
-t = time.time()#start timer to output query run time (diagnostic tool, however, this may be kept.)
+#start timer to output query run time (diagnostic tool, however, this may be kept.)
+t = time.time()
+
 
 #connect to local-volume
 
-#I (perhaps lazily) use this package rather than psycopg2 due to capability to use the .pgpass file of a user. 
-#I should definitely try to migrate to psycopg2 and remove this dependance to decrease runtime.-- A small query may take 30ms, however, loading packages takes ~1s. 
-db=lvdb.database.Database() 
-db.connect()
+#I (perhaps lazily) use the lvdb package rather than psycopg2 due to capability to use the .pgpass file of a user (i.e no manual entry to USER and PASS)
+#I can try to migrate to psycopg2 and remove this dependance to decrease runtime.-- A small query may take 30ms, however, loading packages takes ~1s. 
+
+#this adds about 0.6s to the elapsed time, however, makes the usage more user friendly and easier to troublshoot. Most of the time 
+#seen in the elapsed time after a successfuly query comes from importing this package (in the case of small queries used to test the software)
+
+try:
+    import lvdb.database 
+except ImportError:
+    print('Unable to import lvdb.database. Are you sure your .bashrc file are correctly configured?')
+
+try:
+    db=lvdb.database.Database() 
+    db.connect()
+except ConnectionError:
+    print('Unable to connect to local-volume. Are you sure your .pg pass file is correctly configured?')
+
 
 #verify which keys are present in mast_gloss_test. This will be used to verify whether the user is querying objects that have entries in mast_gloss_test
-
-#to-do: What if the key is present, but there is no id? Have to add something that would output an error code in the final file? 
 keys=[]
 
 key_search=(db.select('SELECT key FROM mast_gloss_test;'))
 
 for item in key_search:
     keys.extend(item)
-    
-#with open('valid_keys.csv', 'wb') as f:#if we wanted to write this to a csv(runtime for this code is very small so it isn't a bad idea to run it each time in case the glossary is being frequently updated)
-#    wr = csv.writer(f)
-#    wr.writerow(valid_keys)
+
+#if we wanted to write this to a csv  
+#with open('valid_keys.csv', 'wb') as f:
+#    writer = csv.writer(f)
+#    writer.writerow(valid_keys)
 
 ####inputs
 
@@ -118,6 +132,11 @@ for x in stru_id_select:
     
 for x in kine_id_select:
     kine_id.extend(db.select(x))
+###############################################################################
+#all code above is more or less universal, i.e, only retieves id's for a given table
+#the code below is currently only capable of selecting all parameters
+###############################################################################
+
 
 ####search query
 #create query to retrive results-- currently recieves all entries from each requested table. Looking into adding capability to pick and choose which parameters. 
@@ -185,7 +204,7 @@ if kine == 1:
         csv_out.writerow(kine_header)
         for row in kine_out:
             csv_out.writerow(row)
-            
+
 #print location files are saved to-- currently assuming the current working directory. should be easy enough to change if necessary. 
 if dist or stru or kine == 1:
     print("FILE(S) SAVED TO: " + os.getcwd())
