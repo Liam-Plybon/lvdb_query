@@ -11,7 +11,7 @@ git clone https://github.com/jmaner/lvdb_query.git
 
 This program depends on the <a href="https://github.com/kadrlica/local-volume-db">local-volume db </a> python package written by <a href="https://github.com/kadrlica/">Alex Drlica-Wagner</a>.
 
-You must then add the line to your <pre>.bashrc</pre> in the format:
+You must then add the line to your .bashrc file in the format:
 
 <pre>
 source PYTHONPATH=~/your_installation_directory/local-volume-db:$PYTHONPATH
