@@ -22,7 +22,9 @@ source PYTHONPATH=~/your_installation_directory/local-volume-db:$PYTHONPATH
 <b>Features in progress/planned: </b>
 
 <ul>
-<li>Detect duplicate keys in input</li>
+<li>Detect typos/tables not present in glossary </li>  ✓
+  
+<li>Detect typos/keys not located in database </li>
   
 <li>Allow users to select individual parameters</li>
 
