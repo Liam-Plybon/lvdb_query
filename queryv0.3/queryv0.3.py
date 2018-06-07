@@ -1,6 +1,7 @@
 #Authors: John Maner, Liam Plybon
 #Contact: jmaner33@tamu.edu, katana@tamu.edu
 #Origin: github.com/jmaner/lvdb_query
+#Version: 0.3
 ###############################################################################
 
 import time
