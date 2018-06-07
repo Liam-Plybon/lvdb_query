@@ -32,7 +32,7 @@ try:
     db=lvdb.database.Database() 
     db.connect()
 except ConnectionError:
-    print('Unable to connect to local-volume. Are you sure your .pg pass file is correctly configured?')
+    print('Unable to connect to local-volume. Are you sure your .pgpass file is correctly configured?')
 
 
 #verify which keys are present in mast_gloss_test. This will be used to verify whether the user is querying objects that have entries in mast_gloss_test
