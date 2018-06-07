@@ -22,11 +22,13 @@ source PYTHONPATH=~/your_installation_directory/local-volume-db:$PYTHONPATH
 <b>Features in progress/planned: </b>
 
 <ul>
-<li>Detect typos/tables not present in glossary </li>  ✓
+<li>✓Detect typos/tables not present in glossary </li>   (v0.2)
   
-<li>Detect typos/keys not located in database </li>
+<li>✓Detect typos/keys not located in database </li>  (v0.2)
   
-<li>Allow users to select individual parameters</li>
+<li>Allow users to select individual parameters</li> (v0.3 in development)
+
+<li>Handle requested entries with key but no id listed in glossary
 
 <li>output key,table,reference,notes to a single separate file called ref? </li>
 </ul>
