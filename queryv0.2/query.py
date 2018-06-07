@@ -34,6 +34,29 @@ try:
 except ConnectionError:
     print('Unable to connect to local-volume. Are you sure your .pgpass file is correctly configured?')
 
+#it may be nice if the tables in the glossary could be fetched automatically as the glossary is expanded/updated. 
+tables=['distance', 'structure', 'kinematics']#update when a table is added to mast_gloss_test
+
+
+#these headers are used for the final output csv, and will also be used to allow users to query individual parameters. 
+#it may be nice if the headers could be fetched automatically in case they are changed. this would take a little work because I don't know how to query headers 
+#this works for now
+dist_header=['id','key','dist_mod','dist_mod_em','dist_mod_ep','method','ref','comments']
+
+stru_header=['id','key','ra','ra_em','dec','dec_em','dec_ep','ellipticity','ellipticity_em',
+             'ellipticity_ep','position_angle','position_angle_em','position_angle_ep','rscale',
+             'rscale_em','rscale_ep','rparam_2','rparam_2_em','rparam_2_ep','rhalf','rhalf_em',
+             'rhalf_ep','m_v','m_v_em','m_v_ep','apparent_magnitude','apparent_magnitude_em',
+             'apparent_magnitude_ep','ref','comments','model']
+
+kine_header=['id','key','helio_velocity','helio_velocity_em','helio_velocity_ep','ref','comments','n']
+
+master_header=['id','key','dist_mod','dist_mod_em','dist_mod_ep','method','ref','comments',
+               'ra','ra_em','dec','dec_em','dec_ep','ellipticity','ellipticity_em','ellipticity_ep',
+               'position_angle','position_angle_em','position_angle_ep','rscale','rscale_em','rscale_ep',
+               'rparam_2','rparam_2_em','rparam_2_ep','rhalf','rhalf_em','rhalf_ep','m_v','m_v_em','m_v_ep',
+               'apparent_magnitude','apparent_magnitude_em','apparent_magnitude_ep','model',
+               'helio_velocity','helio_velocity_em','helio_velocity_ep','n']
 
 #verify which keys are present in mast_gloss_test. This will be used to verify whether the user is querying objects that have entries in mast_gloss_test
 keys=[]
@@ -43,7 +66,7 @@ key_search=(db.select('SELECT key FROM mast_gloss_test;'))
 for item in key_search:
     keys.extend(item)
 
-#if we wanted to write this to a csv  
+#if we wanted to write this to a csv 
 #with open('valid_keys.csv', 'wb') as f:
 #    writer = csv.writer(f)
 #    writer.writerow(valid_keys)
@@ -51,22 +74,43 @@ for item in key_search:
 ####inputs
 
 in_keys=np.genfromtxt('in_keys.csv', dtype=str, delimiter=',')#keys to search
-in_tabl=np.genfromtxt('in_tabl.csv', dtype=str, delimiter=',')#tables to be searched
+in_tabl=np.genfromtxt('in_tabl.csv', dtype=str, delimiter=',')#tables to be searched(please read note below)
+in_param=np.genfromtxt('in_param.csv', dtype=str, delimiter=',')
+#specific parameters to be searched-- This is designed to work with both the individual
+#parameters, but also expand to the table as a whole. 
+#the goal is to allow a user to simply input a table name
+#and return all parameters. This will make the software more versatile, and is 
+#more convenient to use. For the moment, I will keep in_tabl.csv, however, it is planeed
+#to be removed a simply replaced with in_param.csv. 
 
+
+#check for errors in files- this is used to determine if the data present
+#in a file is the correct type (not datatype), i.e keys in in_keys.csv, etc. 
+
+if set(in_keys).issubset(keys) == True:
+    pass
+else:
+    key_error = []
+    key_error.append(set(in_keys) - set(keys))
+    raise IOError('in_keys.csv contains entries that are not in the glossary: ' + str(key_error))
+
+if set(in_tabl).issubset(tables) == True:
+        pass
+else:
+    tabl_error = []
+    tabl_error.append(set(in_tabl) - set(tables))
+    raise IOError('in_tabl.csv contains table entries in the glossary:' + str(tabl_error))
+
+if set(in_param).issubset(master_header) == True:
+    pass
+else:
+    param_error = []
+    param_error.append(set(in_param) - set(master_header)) #I am leaving tables here for the planned expansion of the params file structure
+    raise IOError('in_param.csv contains a parameter that does not exist: ' + str(param_error))
+        
 ####input interpreter
 
 #search for requested tables 
-
-#it may be nice if the tables in the glossary could be fetched automatically as the glossary is expanded/updated. 
-tables=['distance', 'structure', 'kinematics']#update when a table is added to mast_gloss_test
-
-#these headers are used for the final output csv, and will also be used to allow users to query individual parameters. 
-
-#it may be nice if the headers could be fetched automatically in case they are changed. this would take a little work because I don't know how to query headers 
-#this works for now
-dist_header=['id','key','dist_mod','dist_mod_em','dist_mod_ep','method','ref','comments']
-stru_header=['id','key','ra','ra_em','dec','dec_em','dec_ep','ellipticity','ellipticity_em','ellipticity_ep','position_angle','position_angle_em','position_angle_ep','rscale','rscale_em','rscale_ep','rparam_2','rparam_2_em','rparam_2_ep','rhalf','rhalf_em','rhalf_ep','m_v','m_v_em','m_v_ep','apparent_magnitude','apparent_magnitude_em','apparent_magnitude_ep','ref','comments','model']
-kine_header=['id','key','helio_velocity','helio_velocity_em','helio_velocity_ep','ref','comments','n']
 
 #verify whether a user is requesting data from a certain table--tables currently in mast_gloss_test have to be added manually currently 
 
@@ -86,7 +130,7 @@ for x in in_tabl:
         msg = 'A table you requested does not exist in the glossary: '
         raise TypeError(msg + str(x))
         
-        
+
 #verify that the keys a user is requesting exist in mast_gloss_test
 for x in in_keys:
     if x in keys:
@@ -135,6 +179,7 @@ for x in kine_id_select:
 ###############################################################################
 #all code above is more or less universal, i.e, only retieves id's for a given table
 #the code below is currently only capable of selecting all parameters
+#individual parameter search feature is being built that will also handle searching entire tables
 ###############################################################################
 
 
