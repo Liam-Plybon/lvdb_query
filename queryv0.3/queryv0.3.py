@@ -261,4 +261,3 @@ if dist or stru or kine == 1:
 
 #print elapsed time (does not include time to load packages intentionally)
 print('ELAPSED TIME TO FETCH AND WRITE DATA: ' + str(time.time() - t) + 's.')
-quit()
