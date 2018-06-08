@@ -49,7 +49,9 @@ stru_header=['id','key','ra','ra_em','dec','dec_em','dec_ep','ellipticity','elli
              'rhalf_ep','m_v','m_v_em','m_v_ep','apparent_magnitude','apparent_magnitude_em',
              'apparent_magnitude_ep','ref','comments','model']
 
-kine_header=['id','key','helio_velocity','helio_velocity_em','helio_velocity_ep','ref','comments','n']
+kine_header=['id','key','helio_velocity','helio_velocity_em','helio_velocity_ep','velocity_dispersion',
+             'velocity_dispersion_ep','velocity_dispersion_em','ref','comments','n']
+
 
 master_header=['id','key','dist_mod','dist_mod_em','dist_mod_ep','method','ref','comments',
                'ra','ra_em','dec','dec_em','dec_ep','ellipticity','ellipticity_em','ellipticity_ep',
