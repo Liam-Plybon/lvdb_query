@@ -33,6 +33,9 @@ source PYTHONPATH=~/your_installation_directory/local-volume-db:$PYTHONPATH
 <li>output key,table,reference,notes to a single separate file called ref? </li>
 </ul>
 
+#### v0.3 ####
+Currently identical to v0.2. 
+
 #### v0.2 ####
 
 We are now migrating to a new input structure consisting of a individual .csv for the keys and the required tables. Please see the v0.2 folder for more details. 
