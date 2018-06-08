@@ -54,11 +54,11 @@ kine_header=['id','key','helio_velocity','helio_velocity_em','helio_velocity_ep'
 
 
 master_header=['id','key','dist_mod','dist_mod_em','dist_mod_ep','method','ref','comments',
-               'ra','ra_em','dec','dec_em','dec_ep','ellipticity','ellipticity_em','ellipticity_ep',
+               'ra','ra_em','ra_ep','dec','dec_em','dec_ep','ellipticity','ellipticity_em','ellipticity_ep',
                'position_angle','position_angle_em','position_angle_ep','rscale','rscale_em','rscale_ep',
                'rparam_2','rparam_2_em','rparam_2_ep','rhalf','rhalf_em','rhalf_ep','m_v','m_v_em','m_v_ep',
                'apparent_magnitude','apparent_magnitude_em','apparent_magnitude_ep','model',
-               'helio_velocity','helio_velocity_em','helio_velocity_ep','n']
+               'helio_velocity','helio_velocity_em','helio_velocity_ep','n','distance', 'structure', 'kinematics']#contains table names as well
 
 #verify which keys are present in mast_gloss_test. This will be used to verify whether the user is querying objects that have entries in mast_gloss_test
 keys=[]
