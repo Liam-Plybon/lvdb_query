@@ -132,21 +132,23 @@ kine_table=0
 #if just a table is being queried, the ...._table variable is activated, and the program simply proceeds
 #as it did in v0.2
 for x in in_param:
-    if x in dist_header:
-        dist=1
-        dist_param=[i for e in dist_header for i in in_param if e in i]
-    elif x in stru_header:
-        stru=1
-        stru_param=[i for e in stru_header for i in in_param if e in i]
-    elif x in kine_header:
-        kine=1
-        kine_param=[i for e in kine_header for i in in_param if e in i]
-    elif x == 'distance':
+    if x == 'distance':
         dist_table=1
     elif x == 'structure':
         stru_table=1
     elif x == 'kinematics':
         kine_table=1
+    elif x in dist_header:
+        dist=1
+        dist_param=[i for e in dist_header for i in in_param if e in i]
+    elif x in kine_header:
+        kine=1
+        kine_param=[i for e in kine_header for i in in_param if e in i]
+    elif x in stru_header:
+        stru=1
+        stru_param=[i for e in stru_header for i in in_param if e in i]
+
+
     #I do not include an exception here because in_param inputs have been verified above
         
 
@@ -246,7 +248,7 @@ if stru_table == 1:
     for x in stru_table_search:
         stru_table_out.extend(db.select(x))
 
-if kine_table == 1:    
+if kine_table == 1:     
     for x in kine_table_search:
         kine_table_out.extend(db.select(x))
     
@@ -265,6 +267,8 @@ if stru == 1:
 if kine == 1:
     for x in kine_search:
         kine_out.extend(db.select(x))
+        
+        
 ####write .csv output
 #verify whether csv needs to be written by checking if user requested
 
