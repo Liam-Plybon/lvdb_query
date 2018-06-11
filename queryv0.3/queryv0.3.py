@@ -233,7 +233,6 @@ if kine == 1:
         kine_search.extend(['SELECT ' + str(kine_param).replace('[','').replace(']','').replace('\'','') + ' FROM kinematics WHERE id=\'' + str(id).replace('(','').replace(',)','') + '\';'])
         
         
-
 dist_table_out=[]
 stru_table_out=[]
 kine_table_out=[]
