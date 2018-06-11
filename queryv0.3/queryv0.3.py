@@ -79,15 +79,9 @@ for item in key_search:
 ####inputs
 
 in_keys=np.genfromtxt('in_keys.csv', dtype=str, delimiter=',')#keys to search
-in_tabl=np.genfromtxt('in_tabl.csv', dtype=str, delimiter=',')#tables to be searched(please read note below)
 in_param=np.genfromtxt('in_param.csv', dtype=str, delimiter=',')
 #specific parameters to be searched-- This is designed to work with both the individual
-#parameters, but also expand to the table as a whole. 
-#the goal is to allow a user to simply input a table name
-#and return all parameters. This will make the software more versatile, and is 
-#more convenient to use. For the moment, I will keep in_tabl.csv, however, it is planeed
-#to be removed a simply replaced with in_param.csv. 
-
+#parameters, but also the table. 
 
 #check for errors in files- this is used to determine if the data present
 #in a file is the correct type (not datatype), i.e keys in in_keys.csv, etc. 
@@ -96,22 +90,24 @@ if set(in_keys).issubset(keys) == True:
     pass
 else:
     key_error = []
-    key_error.append(set(in_keys) - set(keys))
+    key_error.append(list(set(in_keys) - set(keys)))
     raise IOError('in_keys.csv contains entries that are not in the glossary: ' + str(key_error))
-
-if set(in_tabl).issubset(tables) == True:
-        pass
-else:
-    tabl_error = []
-    tabl_error.append(set(in_tabl) - set(tables))
-    raise IOError('in_tabl.csv contains table entries in the glossary:' + str(tabl_error))
 
 if set(in_param).issubset(master_header) == True:
     pass
 else:
     param_error = []
-    param_error.append(set(in_param) - set(master_header)) #I am leaving tables here for the planned expansion of the params file structure
-    raise IOError('in_param.csv contains a parameter that does not exist: ' + str(param_error))
+    param_error.append(list(set(in_param) - set(master_header))) #I am leaving tables here for the planned expansion of the params file structure
+    raise IOError('in_param.csv contains a parameter(s) that does not exist: ' + str(param_error))
+    
+        
+#verify that the keys a user is requesting exist in mast_gloss_test
+for x in in_keys:
+    if x in keys:
+        pass
+    else:
+        raise IOError('A key you requested is not currently in the glossary: ' + str(x))
+
         
 ####input interpreter
 
@@ -119,60 +115,68 @@ else:
 
 #verify whether a user is requesting data from a certain table--tables currently in mast_gloss_test have to be added manually currently 
 
-#define dummy variables-- when these becomes "active", i.e = 1, the corresponding table will be searched. 
+#define dummy variables-- when dist, stru, or kine become active, i.e =1, this indicates
+#specific parameters have been queried
+
+#when dist_table, stru_table, or kine_table become active, the entire table has been queried (v0.2 functionality)
 dist=0
 stru=0
 kine=0
+dist_table=0
+stru_table=0
+kine_table=0
 
-for x in in_tabl:
-    if x == 'distance':
+
+#activate dummy variables if necessary to indicate that a table must be searched
+#then fill list with parameters to be searched using a somewhat hard to read (but functional) comparison
+#if just a table is being queried, the ...._table variable is activated, and the program simply proceeds
+#as it did in v0.2
+for x in in_param:
+    if x in dist_header:
         dist=1
-    elif x == 'structure':
+        dist_param=[i for e in dist_header for i in in_param if e in i]
+    elif x in stru_header:
         stru=1
-    elif x == 'kinematics':
+        stru_param=[i for e in stru_header for i in in_param if e in i]
+    elif x in kine_header:
         kine=1
-    else:
-        msg = 'A table you requested does not exist in the glossary: '
-        raise TypeError(msg + str(x))
+        kine_param=[i for e in kine_header for i in in_param if e in i]
+    elif x == 'distance':
+        dist_table=1
+    elif x == 'structure':
+        stru_table=1
+    elif x == 'kinematics':
+        kine_table=1
+    #I do not include an exception here because in_param inputs have been verified above
         
-
-#verify that the keys a user is requesting exist in mast_gloss_test
-for x in in_keys:
-    if x in keys:
-        pass
-    else:
-        msg = 'A key you requested is not currently in the glossary: '
-        raise TypeError(msg + str(x))
-
 
 ####id fetcher
 #constructs a lists of queries with the appropriate keys for each requested table
 
-#blank lists for id search queries to be added to
+#create queries as strings, then add to lists
 dist_id_select=[]
 stru_id_select=[]
 kine_id_select=[]
 
-#create queries as strings, then add to lists
-if dist == 1:
+if dist_table or dist == 1:
     for key in in_keys:
         dist_id_select.extend(['SELECT dist_id FROM mast_gloss_test WHERE key=\'' + str(key) + '\';'])#replace mast_gloss_test with final glossary table
         
-if stru == 1:
+if stru_table or stru == 1:
     for key in in_keys:
         stru_id_select.extend(['SELECT stru_id FROM mast_gloss_test WHERE key=\'' + str(key) + '\';'])
         
-if kine == 1:
+if kine_table or kine == 1:
     for key in in_keys:
         kine_id_select.extend(['SELECT kine_id FROM mast_gloss_test WHERE key=\'' + str(key) + '\';'])
         
 
-#blank lists to be populated with desired id's from mast_gloss_test
+#I am (perhaps lazily) using the select function in the lvdb package. This function recieves a query as a string
+
 dist_id=[]
 stru_id=[]
 kine_id=[]
 
-#I am (perhaps lazily) using the select function in the lvdb package. This function recieves a query as a string
 for x in dist_id_select:
     dist_id.extend(db.select(x))
     
@@ -189,74 +193,141 @@ for x in kine_id_select:
 
 
 ####search query
-#create query to retrive results-- currently recieves all entries from each requested table. Looking into adding capability to pick and choose which parameters. 
-#Could probably implement using the headers and input the headers in place of * in the query below. 
 
-#blank lists to be populated with search queries
+#create query to retrive results-- 
+
+#for entrire tables-- note the SELECT * FROM ...... query format
+
+dist_table_search=[]
+stru_table_search=[]
+kine_table_search=[]
+
+if dist_table == 1:
+    for id in dist_id:
+        dist_table_search.extend(['SELECT * FROM distance WHERE id=\'' + str(id).replace('(','').replace(',)','') + '\';'])
+        
+if stru_table == 1:
+    for id in stru_id:
+        stru_table_search.extend(['SELECT * FROM structure WHERE id=\'' + str(id).replace('(','').replace(',)','') + '\';'])
+        
+if kine_table == 1:
+    for id in kine_id:
+        kine_table_search.extend(['SELECT * FROM kinematics WHERE id=\'' + str(id).replace('(','').replace(',)','') + '\';'])
+
+#create queries for individual parameters-- this gets a bit messier because the query must be in the format:
+#SELECT param_1,param_2,...,param_n
 dist_search=[]
 stru_search=[]
 kine_search=[]
 
 if dist == 1:
     for id in dist_id:
-        dist_search.extend(['SELECT * FROM distance WHERE id=\'' + str(id).replace('(','').replace(',)','') + '\';'])
+        dist_search.extend(['SELECT ' + str(dist_param).replace('[','').replace(']','').replace('\'','') + ' FROM distance WHERE id=\'' + str(id).replace('(','').replace(',)','') + '\';'])
         
 if stru == 1:
     for id in stru_id:
-        stru_search.extend(['SELECT * FROM structure WHERE id=\'' + str(id).replace('(','').replace(',)','') + '\';'])
+        stru_search.extend(['SELECT ' + str(stru_param).replace('[','').replace(']','').replace('\'','') + ' FROM structure WHERE id=\'' + str(id).replace('(','').replace(',)','') + '\';'])
         
 if kine == 1:
     for id in kine_id:
-        kine_search.extend(['SELECT * FROM kinematics WHERE id=\'' + str(id).replace('(','').replace(',)','') + '\';'])
+        kine_search.extend(['SELECT ' + str(kine_param).replace('[','').replace(']','').replace('\'','') + ' FROM kinematics WHERE id=\'' + str(id).replace('(','').replace(',)','') + '\';'])
+        
+        
+
+dist_table_out=[]
+stru_table_out=[]
+kine_table_out=[]
 
 #fetch results
+if dist_table == 1:
+    for x in dist_table_search:
+        dist_table_out.extend(db.select(x))
+
+if stru_table == 1:    
+    for x in stru_table_search:
+        stru_table_out.extend(db.select(x))
+
+if kine_table == 1:    
+    for x in kine_table_search:
+        kine_table_out.extend(db.select(x))
+    
 dist_out=[]
 stru_out=[]
 kine_out=[]
 
-for x in dist_search:
-    dist_out.extend(db.select(x))
-    
-for x in stru_search:
-    stru_out.extend(db.select(x))
-    
-for x in kine_search:
-    kine_out.extend(db.select(x))
-    
+if dist == 1:
+    for x in dist_search:
+        dist_out.extend(db.select(x))
+        
+if stru == 1:
+    for x in stru_search:
+        stru_out.extend(db.select(x))
+        
+if kine == 1:
+    for x in kine_search:
+        kine_out.extend(db.select(x))
 ####write .csv output
 #verify whether csv needs to be written by checking if user requested
 
 #I added a random character generator to the end of each file name to avoid files being overwritten. These will start to pile up in testing
 #you may want to add a file on your personal machine that removes these files that begin with distance_out, structure_out, etc in the lvdb_query/query_v0.2 directory
-if dist == 1:
-    dist_csv = 'distance_out' + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5)) + '.csv'
+
+suffix=str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5)))
+
+if dist_table == 1:
+    dist_csv = 'distance_out' + str(suffix) + '.csv'
     print('FILE ' + dist_csv + ' WAS SAVED')
     with open(dist_csv,'wb') as out:
         csv_out=csv.writer(out)
         csv_out.writerow(dist_header)
+        for row in dist_table_out:
+            csv_out.writerow(row)
+elif dist == 1:
+    dist_csv = 'distance_out' + str(suffix) + '.csv'
+    print('FILE ' + dist_csv + ' WAS SAVED')
+    with open(dist_csv,'wb') as out:
+        csv_out=csv.writer(out)
+        csv_out.writerow(dist_param)
         for row in dist_out:
             csv_out.writerow(row)
 
-if stru == 1:
-    stru_csv = 'structure_out' + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5)) + '.csv'
+if stru_table == 1:
+    stru_csv = 'structure_out' + str(suffix) + '.csv'
     print('FILE ' + stru_csv + ' WAS SAVED')
     with open(stru_csv,'wb') as out:
         csv_out=csv.writer(out)
         csv_out.writerow(stru_header)
+        for row in stru_table_out:
+            csv_out.writerow(row)
+elif stru == 1:
+    stru_csv = 'structure_out' + str(suffix) + '.csv'
+    print('FILE ' + stru_csv + ' WAS SAVED')
+    with open(stru_csv,'wb') as out:
+        csv_out=csv.writer(out)
+        csv_out.writerow(stru_param)
         for row in stru_out:
             csv_out.writerow(row)
 
-if kine == 1:
-    kine_csv = 'kinematics_out' + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5)) + '.csv'
+if kine_table == 1:
+    kine_csv = 'kinematics_out' + str(suffix) + '.csv'
     print('FILE ' + kine_csv + ' WAS SAVED')
     with open(kine_csv,'wb') as out:
         csv_out=csv.writer(out)
         csv_out.writerow(kine_header)
-        for row in kine_out:
+        for row in kine_table_out:
+            csv_out.writerow(row)
+elif kine == 1:
+    kine_csv = 'kinematics_out' + str(suffix) + '.csv'
+    print('FILE ' + kine_csv + ' WAS SAVED')
+    with open(kine_csv,'wb') as out:
+        csv_out=csv.writer(out)
+        csv_out.writerow(kine_param)
+        for row in dist_out:
             csv_out.writerow(row)
 
+
 #print location files are saved to-- currently assuming the current working directory. should be easy enough to change if necessary. 
-if dist or stru or kine == 1:
+if dist or stru or kine or dist_table or stru_table or kine_table == 1:
     print("FILE(S) SAVED TO: " + os.getcwd())
 
 #print elapsed time (does not include time to load packages intentionally)
