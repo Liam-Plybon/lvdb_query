@@ -131,6 +131,10 @@ kine_table=0
 #then fill list with parameters to be searched using a somewhat hard to read (but functional) comparison
 #if just a table is being queried, the ...._table variable is activated, and the program simply proceeds
 #as it did in v0.2
+dist_param=[]
+kine_param=[]
+stru_param=[]
+
 for x in in_param:
     if x == 'distance':
         dist_table=1
@@ -140,13 +144,13 @@ for x in in_param:
         kine_table=1
     elif x in dist_header:
         dist=1
-        dist_param=[i for e in dist_header for i in in_param if e in i]
+        dist_param.append(x)
     elif x in kine_header:
         kine=1
-        kine_param=[i for e in kine_header for i in in_param if e in i]
+        kine_param.append(x)
     elif x in stru_header:
         stru=1
-        stru_param=[i for e in stru_header for i in in_param if e in i]
+        stru_param.append(x)
 
 
     #I do not include an exception here because in_param inputs have been verified above
@@ -325,7 +329,7 @@ elif kine == 1:
     with open(kine_csv,'wb') as out:
         csv_out=csv.writer(out)
         csv_out.writerow(kine_param)
-        for row in dist_out:
+        for row in kine_out:
             csv_out.writerow(row)
 
 
