@@ -1,15 +1,21 @@
-    #Authors: John Maner, Liam Plybon
-    #Contact: jmaner33@tamu.edu, katana@tamu.edu
-    #Origin: github.com/jmaner/lvdb_query
-    #Version: 0.3
-    ###############################################################################
+#!/usr/bin/env python
     
-    import time
-    import csv
-    import random
-    import string
-    import os
-    import numpy as np
+#Authors: John Maner, Liam Plybon
+#Contact: jmaner33@tamu.edu, katana@tamu.edu
+#Origin: github.com/jmaner/lvdb_query
+#Version: 0.3
+###############################################################################
+
+
+import time
+import csv
+import random
+import string
+import os
+import numpy as np
+
+def query(keys,params):
+
     #import lvdb.database #uncomment to import without try except statement below
     
     #start timer to output query run time (diagnostic tool, however, this may be kept.)
@@ -17,7 +23,7 @@
     
     
     #connect to local-volume
-    
+        
     #I (perhaps lazily) use the lvdb package rather than psycopg2 due to capability to use the .pgpass file of a user (i.e no manual entry to USER and PASS)
     #I can try to migrate to psycopg2 and remove this dependance to decrease runtime.-- A small query may take 30ms, however, loading packages takes ~1s. 
     
@@ -75,8 +81,8 @@
     
     ####inputs
     
-    in_keys=np.genfromtxt('in_keys.csv', dtype=str, delimiter=',')#keys to search
-    in_param=np.genfromtxt('in_param.csv', dtype=str, delimiter=',')
+    in_keys=np.genfromtxt(keys, dtype=str, delimiter=',')#keys to search
+    in_param=np.genfromtxt(params, dtype=str, delimiter=',')
     #specific parameters to be searched-- This is designed to work with both the individual
     #parameters, but also the table. 
     
