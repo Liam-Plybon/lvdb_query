@@ -125,13 +125,22 @@
     
     
     #activate yes/no variables to indicate that a table must be searched
-    #then fill list with parameters to be searched using a somewhat hard to read (but functional) comparison
+    #then fill list with parameters to be searched
+    
     #if just a table is being queried, the ...._table variable is activated, and the program simply proceeds
     #as it did in v0.2
+    
+    #lists start with 'key' in order to automatically query the key
     dist_param=['key']
     kine_param=['key']
     stru_param=['key']
     
+    for x in in_param:
+        if x in ['key','ref']:
+            raise IOError('Keys and reference codes are handled automatically. Please do not manually request these.')
+        else:
+            pass
+        
     for x in in_param:
         if x == 'distance':
             dist_table=1
@@ -148,16 +157,14 @@
         elif x in stru_header:
             stru=1
             stru_param.append(x)
-        if x == 'key' or 'ref':
-            raise IOError('Keys and reference codes are handled automatically. Please do not manually request these.')
-            
+        
+    #automatically adds the reference code to the end of the query if the parameters are being requested. 
     if dist == 1:
         dist_param.append('ref')
     if kine == 1:
         kine_param.append('ref')
     if stru == 1:
         stru_param.append('ref')
-        #I do not include an exception here because in_param inputs have been verified above
             
     
     ####id fetcher
