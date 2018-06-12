@@ -26,15 +26,22 @@ source PYTHONPATH=~/your_installation_directory/local-volume-db:$PYTHONPATH
   
 <li>✓Detect typos/keys not located in database </li>  (v0.2)
   
-<li>Allow users to select individual parameters</li> (v0.3 in development)
+<li>✓Allow users to select individual parameters</li> (v0.3)
 
-<li>Handle requested entries with key but no id listed in glossary
+<li>✓Handle requested entries with key but no id listed in glossary (v0.3)
 
 <li>output key,table,reference,notes to a single separate file called ref? </li>
 </ul>
 
+#### v0.4 ####
+In development. 
+
 #### v0.3 ####
-Currently identical to v0.2. 
+Allows user to query data as a function in python. The function and its arguments are:
+
+query(<b>keys</b>=<i>'in_keys.csv'</i>, <b>params</b>=<i>'in_param.csv'</i>
+
+This is done so to make further versions more versatile, and will eventually see the input structure become more open ended. Another function is available in v0.4(in development) that fetches keys from the database based on an WHERE query in which all keys that fall within a range of values for a parameter. This may then be called in the function, removing the need for an input file. 
 
 #### v0.2 ####
 
