@@ -71,6 +71,8 @@ def query(keys,params):
     
     key_search=(db.select('SELECT key FROM mast_gloss_test;'))
     
+    deleto = 'hi doyeon'
+    
     for item in key_search:
         keys.extend(item)
     
